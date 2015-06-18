@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@drawable/big_cards"
+    >
+
+    <TextView
+    android:id="@+id/stationName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dip"
+    android:paddingTop="6dip"
+    android:textColor="#0066FF"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    android:text="Station Title"
+    android:paddingLeft="5dp"/>
+
+    <!-- Improved label -->
+    <TextView
+    android:id="@+id/address"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="The Address"
+    android:textColor="#7E7E7E"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp" />
+
+
+
+</LinearLayout>
