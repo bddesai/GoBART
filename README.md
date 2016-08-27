@@ -8,3 +8,5 @@ GoBART helps you to
 2. Access information of all stations and also view the location on Google Maps
 3. View Route Map (with pinch-to-zoom)
 ```
+
+Playstore link to download: https://play.google.com/store/apps/details?id=com.source.bhavin.gobart
