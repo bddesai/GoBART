@@ -1,12 +1,7 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.controller;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,12 +14,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.source.bhavin.gobart.R;
+import com.source.bhavin.gobart.model.Station;
+import com.source.bhavin.gobart.view.FragmentFare;
+import com.source.bhavin.gobart.view.FragmentRoute;
+import com.source.bhavin.gobart.view.FragmentStationInfo;
+import com.source.bhavin.gobart.view.MapsFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

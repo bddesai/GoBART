@@ -1,4 +1,4 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.view;
 
 
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.source.bhavin.gobart.R;
 
 
 /**

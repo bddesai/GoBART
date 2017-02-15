@@ -1,4 +1,4 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.controller;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.source.bhavin.gobart.R;
+import com.source.bhavin.gobart.model.Station;
 
 import java.util.ArrayList;
 

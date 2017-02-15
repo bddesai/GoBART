@@ -1,13 +1,14 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.controller;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.source.bhavin.gobart.R;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 public class DrawerListBaseAdapter extends BaseAdapter {
 
 
-    ArrayList<String> drawerList= new ArrayList<>();
-    int[] drawerImageList;
-    LayoutInflater inflater;
-    Context context;
+    private ArrayList<String> drawerList= new ArrayList<>();
+    private int[] drawerImageList;
+    private LayoutInflater inflater;
+    private Context context;
 
     public DrawerListBaseAdapter(Context context, ArrayList<String> myList, int[] imageList) {
         this.drawerList = myList;

@@ -1,4 +1,4 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.view;
 
 
 import android.annotation.SuppressLint;
@@ -6,12 +6,13 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.FloatMath;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.source.bhavin.gobart.R;
 
 
 /**
@@ -104,7 +105,7 @@ public class FragmentRoute extends Fragment {
             private float spacing(MotionEvent event) {
                 float x = event.getX(0) - event.getX(1);
                 float y = event.getY(0) - event.getY(1);
-                return FloatMath.sqrt(x * x + y * y);
+                return (float)Math.sqrt(x * x + y * y);
             }
 
             private void midPoint(PointF point, MotionEvent event) {

@@ -1,4 +1,4 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.view;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.source.bhavin.gobart.R;
+import com.source.bhavin.gobart.model.Station;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

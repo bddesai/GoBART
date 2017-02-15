@@ -1,22 +1,18 @@
-package com.source.bhavin.gobart;
-
-import android.util.Log;
+package com.source.bhavin.gobart.service;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Bhavin on 4/29/2015.
  */
 public class ServiceHandler {
-    static String response = null;
+    private static String response = null;
     public final static int GET = 1;
     public final static int POST = 2;
 
@@ -43,11 +39,7 @@ public class ServiceHandler {
             response = EntityUtils.toString(httpEntity);
 
             //Log.d("check", "Response: > " + response);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
 

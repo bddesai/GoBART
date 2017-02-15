@@ -1,4 +1,4 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.view;
 
 
 import android.annotation.TargetApi;
@@ -7,12 +7,18 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.source.bhavin.gobart.R;
+import com.source.bhavin.gobart.controller.StationListBaseAdapter;
+import com.source.bhavin.gobart.model.Station;
+import com.source.bhavin.gobart.service.ServiceHandler;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -32,10 +38,9 @@ import java.util.ArrayList;
  */
 public class FragmentStationInfo extends Fragment implements AdapterView.OnItemClickListener {
 
+    private static final String TAG = FragmentStationInfo.class.getSimpleName();
     private ListView listView;
-
     private OnFragmentInteractionListener mListener;
-
     private ArrayList<Station> resultList = new ArrayList<>();
 
 
@@ -146,34 +151,31 @@ public class FragmentStationInfo extends Fragment implements AdapterView.OnItemC
                     stations = new ArrayList();
                     break;
                 case XmlPullParser.START_TAG:
-                    name = parser.getName();
-                    if(name.equals("station")) {        // parent tag
-                        currentStation = new Station();
+                    try {
+                        name = parser.getName();
+                        if (name.equals("station")) {        // parent tag
+                            currentStation = new Station();
+                        } else if (name.equals("name")) {      // name of the station
+                            currentStation.setName(parser.nextText());
+                        } else if (name.equals("abbr")) {      // abbreviation of station
+                            currentStation.setAbbr(parser.nextText());
+                        } else if (name.equals("gtfs_latitude")) {      // latitude of station
+                            currentStation.setLatitude(parser.nextText());
+                        } else if (name.equals("gtfs_longitude")) {      // longitude of station
+                            currentStation.setLongitude(parser.nextText());
+                        } else if (name.equals("address")) {      // city of station
+                            currentStation.setAddress(parser.nextText());
+                        } else if (name.equals("city")) {      // city of station
+                            currentStation.setCity(parser.nextText());
+                        } else if (name.equals("state")) {      // state of station
+                            currentStation.setState(parser.nextText());
+                        } else if (name.equals("zipcode")) {      // zipcode of station
+                            currentStation.setZipcode(parser.nextText());
+                        }
+                    }catch (NullPointerException e){
+                        Log.e(TAG, e.getMessage());
                     }
-                    else if(name.equals("name")) {      // name of the station
-                        currentStation.setName(parser.nextText());
-                    }
-                    else if(name.equals("abbr")) {      // abbreviation of station
-                        currentStation.setAbbr(parser.nextText());
-                    }
-                    else if(name.equals("gtfs_latitude")) {      // latitude of station
-                        currentStation.setLatitude(parser.nextText());
-                    }
-                    else if(name.equals("gtfs_longitude")) {      // longitude of station
-                        currentStation.setLongitude(parser.nextText());
-                    }
-                    else if(name.equals("address")) {      // city of station
-                        currentStation.setAddress(parser.nextText());
-                    }
-                    else if(name.equals("city")) {      // city of station
-                        currentStation.setCity(parser.nextText());
-                    }
-                    else if(name.equals("state")) {      // state of station
-                        currentStation.setState(parser.nextText());
-                    }
-                    else if(name.equals("zipcode")) {      // zipcode of station
-                        currentStation.setZipcode(parser.nextText());
-                    }
+
                     break;
 
                 case XmlPullParser.END_TAG:

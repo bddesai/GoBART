@@ -1,4 +1,4 @@
-package com.source.bhavin.gobart;
+package com.source.bhavin.gobart.model;
 
 /**
  * Created by Bhavin on 3/21/2015.
