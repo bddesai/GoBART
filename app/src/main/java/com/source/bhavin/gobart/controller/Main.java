@@ -2,8 +2,11 @@ package com.source.bhavin.gobart.controller;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -18,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.source.bhavin.gobart.R;
 import com.source.bhavin.gobart.model.Station;
@@ -30,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Main extends AppCompatActivity implements AdapterView.OnItemClickListener, FragmentStationInfo.OnFragmentInteractionListener{
+public class Main extends AppCompatActivity implements AdapterView.OnItemClickListener, FragmentStationInfo.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private ListView listView;
@@ -44,14 +48,20 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (!isNetworkConnectionAvailable()) {
+            setContentView(R.layout.network_not_available);
+            Toast.makeText(this, "Network not available. Please try again later", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (savedInstanceState == null) {
             mFragment = new FragmentFare();
-            FragmentTransaction fragmentTransaction  = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.mainContent, mFragment, "fareFrag").commit();
-        }else {
+        } else {
             mFragment = getSupportFragmentManager().findFragmentByTag("fareFrag");
         }
-        drawerItems= getResources().getStringArray(R.array.drawerItems);
+        drawerItems = getResources().getStringArray(R.array.drawerItems);
         // convert String array to arraylist
         ArrayList<String> stringList = new ArrayList<>(Arrays.asList(drawerItems));
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -62,7 +72,7 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         listView.setOnItemClickListener(this);
 
         //drawerListener = new ActionBarDrawerToggle(this, drawerLayout, R.mipmap.ic_drawer, R.string.drawer_open, R.string.drawer_close){
-        drawerListener = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close){
+        drawerListener = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -81,6 +91,15 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+
+    public boolean isNetworkConnectionAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null) return false;
+        NetworkInfo.State network = info.getState();
+        return (network == NetworkInfo.State.CONNECTED || network == NetworkInfo.State.CONNECTING);
+    }
+
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
@@ -92,7 +111,6 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         //Toast.makeText(this, drawerItems[position]+" was selected", Toast.LENGTH_SHORT).show();
         selectItem(position);
     }
-
 
 
     // selects the item handled in ListView and displays respective Fragments
@@ -121,13 +139,14 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         ft.replace(R.id.mainContent, frag).addToBackStack("mainFrags").commit();
 
         listView.setItemChecked(position, true);
-        setTitle("GoBART - "+drawerItems[position]);
+        setTitle("GoBART - " + drawerItems[position]);
 
         // Close drawer
         drawerLayout.closeDrawer(listView);
     }
+
     // Sets the Title in Action Bar to Value selected from Drawerlist
-    public void setTitle(String title){
+    public void setTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
@@ -141,7 +160,7 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(drawerListener.onOptionsItemSelected(item))
+        if (drawerListener.onOptionsItemSelected(item))
             return true;
 
         switch (item.getItemId()) {
@@ -160,7 +179,7 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         drawerListener.onConfigurationChanged(newConfig);
     }
 
-    public void exitApplication(){
+    public void exitApplication() {
         // Prepare the Dialog Box for exit
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to exit GoBart?").setCancelable(false);
@@ -190,10 +209,9 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         String stationName = station.getName();
         double newlat = Double.parseDouble(station.getLatitude());
         double newlong = Double.parseDouble(station.getLongitude());
-        if(mapsFragment!=null){
+        if (mapsFragment != null) {
             mapsFragment.updateArticleView(newlat, newlong, stationName);
-        }
-        else{
+        } else {
             // Create fragment and give it an argument for the selected article
             MapsFragment newMapsFragment = new MapsFragment();
             newMapsFragment.populateMapsFragment(newlat, newlong, stationName);

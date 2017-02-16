@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.source.bhavin.gobart.R;
+import com.source.bhavin.gobart.controller.Main;
 import com.source.bhavin.gobart.controller.StationListBaseAdapter;
 import com.source.bhavin.gobart.model.Station;
 import com.source.bhavin.gobart.service.ServiceHandler;
@@ -57,6 +58,11 @@ public class FragmentStationInfo extends Fragment implements AdapterView.OnItemC
                              Bundle savedInstanceState) {
         // Inflate the spinner_item for this fragment
         View rootView = inflater.inflate(R.layout.fragment_station_info, container, false);
+
+        if(!((Main)getActivity()).isNetworkConnectionAvailable()) {
+            rootView = inflater.inflate(R.layout.network_not_available, container, false);
+            return rootView;
+        }
 
         // Identify your Listview from the spinner_item
         listView = (ListView) rootView.findViewById(R.id.stationListView);

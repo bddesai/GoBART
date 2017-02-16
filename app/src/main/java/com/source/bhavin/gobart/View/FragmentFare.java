@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.source.bhavin.gobart.R;
+import com.source.bhavin.gobart.controller.Main;
 import com.source.bhavin.gobart.model.Station;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -30,10 +31,10 @@ import java.util.ArrayList;
 
 public class FragmentFare extends Fragment {
 
-    private static Spinner sp1;
-    private static Spinner sp2;
-    private static Button bt;
-    private static TextView tv;
+    private static Spinner spinnerSource;
+    private static Spinner spinnerDestination;
+    private static Button btnCalculateFare;
+    private static TextView textViewFare;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,34 +55,46 @@ public class FragmentFare extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_fare, container, false);
 
+        if(!((Main)getActivity()).isNetworkConnectionAvailable()) {
+            rootView = inflater.inflate(R.layout.network_not_available, container, false);
+            return rootView;
+        }
+
         final String apiUrl = "http://api.bart.gov/api/stn.aspx?cmd=stns";
         final String apiUrl2 = "http://api.bart.gov/api/sched.aspx?cmd=fare&orig=";
         final String apiKey = "QWVJ-USED-IPZQ-DT35";
 
 
-        sp1 = (Spinner) rootView.findViewById(R.id.spinner);
-        sp2 = (Spinner) rootView.findViewById(R.id.spinner2);
+        spinnerSource = (Spinner) rootView.findViewById(R.id.spinner);
+        spinnerDestination = (Spinner) rootView.findViewById(R.id.spinner2);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, new ArrayList<String>());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        sp1.setAdapter(adapter);
-        sp2.setAdapter(adapter);
+        spinnerSource.setAdapter(adapter);
+        spinnerDestination.setAdapter(adapter);
 
         String url = apiUrl + "&key=" + apiKey;
         new TaskPopulateStation().execute(url);
 
-        bt = (Button) rootView.findViewById(R.id.button);
-        bt.setOnClickListener(new View.OnClickListener() {
+
+
+        btnCalculateFare = (Button) rootView.findViewById(R.id.button);
+        btnCalculateFare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String orig = sp1.getSelectedItem().toString();
-                String dest = sp2.getSelectedItem().toString();
+                if(!((Main)getActivity()).isNetworkConnectionAvailable()) {
+                    Toast.makeText(getActivity(), "Network not available. Please try again later", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String orig = spinnerSource.getSelectedItem().toString();
+                String dest = spinnerDestination.getSelectedItem().toString();
                 orig = orig.substring(orig.length() - 5, orig.length() - 1);
                 dest = dest.substring(dest.length() - 5, dest.length() - 1);
 
                 // if source and destination are same, throw a message
                 if(orig.equals(dest)) {
                     Toast.makeText(getActivity(), "Source and Destination are same.", Toast.LENGTH_SHORT).show();
-                    tv.setText(" ");
+                    textViewFare.setText(" ");
                 }else{
                     String url2 = apiUrl2 + orig + "&dest=" + dest + "&date=today&key=" + apiKey;
                     new TaskCalculateFare().execute(url2);
@@ -89,12 +102,11 @@ public class FragmentFare extends Fragment {
             }
         });
 
-        tv = (TextView) rootView.findViewById(R.id.textView2);
+        textViewFare = (TextView) rootView.findViewById(R.id.textView2);
 
         // Inflate the spinner_item for this fragment
         return rootView;
     }
-
 
     // Parsing the XML to accumulate station information
     private ArrayList<Station> parseXmlStations(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -141,7 +153,7 @@ public class FragmentFare extends Fragment {
         and it is a helper function of AsyncTask
     */
     private void addStations(ArrayList<Station> stations) {
-        ArrayAdapter<String> adapter = (ArrayAdapter<String>) sp1.getAdapter();
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinnerSource.getAdapter();
         for(Station st: stations){
             adapter.add(st.getName() + " (" + st.getAbbr() + ")");
         }
@@ -149,8 +161,12 @@ public class FragmentFare extends Fragment {
 
     // method to display fare value
     private void showFare(String fare) {
-        tv.setVisibility(View.VISIBLE);
-        tv.setText(fare + "$");
+        if(fare!=null) {
+            textViewFare.setVisibility(View.VISIBLE);
+            textViewFare.setText(fare + "$");
+            return;
+        }
+        textViewFare.setText("Network Error");
     }
 
     // Background task to pull and bind station names to Spinners
