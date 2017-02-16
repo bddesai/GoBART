@@ -30,11 +30,10 @@ import java.util.ArrayList;
 
 public class FragmentFare extends Fragment {
 
-    Spinner sp1;
-    Spinner sp2;
-    Button bt;
-    TextView tv;
-
+    private static Spinner sp1;
+    private static Spinner sp2;
+    private static Button bt;
+    private static TextView tv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,28 +137,6 @@ public class FragmentFare extends Fragment {
         return stations;
     }
 
-    //  Parsing the API querystring to calculate fare
-    private String parseXmlFare(XmlPullParser parser) throws XmlPullParserException, IOException {
-        String fare = null;
-        int eventType = parser.getEventType();
-
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            String name;
-            switch (eventType) {
-                case XmlPullParser.START_DOCUMENT:
-                    break;
-                case XmlPullParser.START_TAG:
-                    name = parser.getName();
-                    if(name.equals("fare")) {
-                        fare = parser.nextText();
-                    }
-                    break;
-            }
-            eventType = parser.next();
-        }
-        return fare;
-    }
-
     /* Method to bind stations names to ArrayAdapters of  Spinner
         and it is a helper function of AsyncTask
     */
@@ -255,6 +232,28 @@ public class FragmentFare extends Fragment {
         protected void onPostExecute(String fare) {
             showFare(fare);
         }
+    }
+
+    //  Parsing the API querystring to calculate fare
+    private String parseXmlFare(XmlPullParser parser) throws XmlPullParserException, IOException {
+
+        int eventType = parser.getEventType();
+
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            String name;
+            switch (eventType) {
+                case XmlPullParser.START_DOCUMENT:
+                    break;
+                case XmlPullParser.START_TAG:
+                    name = parser.getName();
+                    if(name.equals("fare")) {
+                        return parser.nextText();
+                    }
+                    break;
+            }
+            eventType = parser.next();
+        }
+        return null;
     }
 
     @Override
