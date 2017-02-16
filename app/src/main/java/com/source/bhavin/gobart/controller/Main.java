@@ -3,7 +3,6 @@ package com.source.bhavin.gobart.controller;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,7 +53,7 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         drawerItems= getResources().getStringArray(R.array.drawerItems);
         // convert String array to arraylist
-        ArrayList<String> stringList = new ArrayList<String>(Arrays.asList(drawerItems));
+        ArrayList<String> stringList = new ArrayList<>(Arrays.asList(drawerItems));
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
         // Populate the DrawerList
@@ -104,7 +103,6 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         FragmentTransaction ft = manager.beginTransaction();
 
         Fragment frag = null;
-        Intent intent;
 
         switch (position) {
             case 0:
